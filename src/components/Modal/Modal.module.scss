@@ -1,0 +1,17 @@
+.wrapper{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35vw;
+    max-width: 550px;
+    min-width: 300px;
+    padding: 70px 80px 50px;
+    // padding: 50px 80px 50px;
+    background-color: white;
+    box-shadow: 0 20px 40px -5px rgba(#1e58ff, .3);
+
+    button{
+        margin-top: 30px;
+    }
+}

@@ -1,65 +1,97 @@
-import React from 'react'
+import React, { Component } from 'react'
+import Input from '../Input/Input'
+import InputRadio from '../Input/InputRadio'
 import styles from './Form.module.scss'
+import Buttons from '../Buttons/Buttons'
 
- const Form = ({addItem}) => {
-    return (
-        <div className={styles.wrapper}>
-            <h2>Add new twitter account</h2>
-            <form className={styles.form} onSubmit = {addItem}>
-                <div className={styles.formItem}>
-                    <input 
-                        className={styles.input} 
-                        type="text" name="name" 
-                        placeholder=" " 
-                        id="name" 
-                        maxLength="30"/>
-                    <label className={styles.label} htmlFor="name">
-                        Name
-                    </label>
-                    <div className={styles.formItemBar} />
-                </div>
-                <div className={styles.formItem}>
-                    <input 
-                        className={styles.input} 
-                        type = 'text' 
-                        name="link" 
-                        placeholder=" " 
-                        id="link"
-                    />
-                    <label className={styles.label} htmlFor="link">
-                        Link
-                    </label>
-                    <div className={styles.formItemBar} />
-                </div>
-                <div className={styles.formItem}>
-                    <input 
-                        className={styles.input}
-                        type="text"
-                        name="image"
-                        id="image"
-                        placeholder=" "
-                    />
-                    <label className={styles.label} htmlFor="image">
-                        Image
-                    </label>
-                    <div className={styles.formItemBar} />
-                </div>
-                <div className={styles.formItem}>
-                    <textarea 
-                        className={styles.textarea}
-                        name="description"
-                        id="description"
-                        placeholder=" "
-                    />
-                    <label className={styles.label} htmlFor="description">
-                        Description
-                    </label>
-                     <div className={styles.formItemBar} />
-                </div>
-                    <button className={styles.button} type="submit">Add new item</button>
-            </form> 
-        </div>
-    )
+const types = {
+    twitter: 'twitter',
+    article: 'article',
+    note: 'note',
 }
+
+const description = {
+    twitter: 'favorite Twitter account',
+    article: 'Article',
+    note: 'Note',
+}
+
+class Form extends Component {
+
+    state = {
+        activeOption: types.twitter,
+    }
+
+    handleRadioButtonChange = (type) => {
+        this.setState({
+            activeOption: type,
+        })
+    }
+
+    render() {
+
+        const { activeOption } = this.state
+
+        return (
+            <div className={styles.wrapper}>
+                <h2>Add {description[activeOption]}</h2>
+                <form className={styles.form} onSubmit={this.props.addItem} autoComplete="off">
+                    <div className={styles.radioWrapper}>
+                        <InputRadio
+                            id={types.twitter}
+                            type={'radio'}
+                            label={types.twitter}
+                            checked={activeOption === types.twitter}
+                            onChange={() => this.handleRadioButtonChange(types.twitter)}
+                        >
+                            Twitter
+                        </InputRadio>
+                        <InputRadio
+                            id={types.article}
+                            type={'radio'}
+                            label={types.article}
+                            checked={activeOption === types.article}
+                            onChange={() => this.handleRadioButtonChange(types.article)}
+                        >
+                            Article
+                        </InputRadio>
+                        <InputRadio
+                            id={types.note}
+                            type={'radio'}
+                            label={types.note}
+                            checked={activeOption === types.note}
+                            onChange={() => this.handleRadioButtonChange(types.note)}
+                        >
+                            Note
+                        </InputRadio>
+                    </div>
+                    <Input
+                        name="name"
+                        label={activeOption === types.twitter ? 'Twitter Name' : 'Title'}
+                        required
+                        maxLength={30}
+                    />
+                    {activeOption !== types.note ? <Input
+                        name="link"
+                        required
+                        label={activeOption === types.twitter ? 'Twitter Link' : 'Link'}
+                    /> : null}
+                    {activeOption === types.twitter ? <Input
+                        name="image"
+                        label="Image Link"
+                    /> : null}
+                    <Input
+                        tag="textarea"
+                        required
+                        name="description"
+                        label="Description"
+                    />
+                    <Buttons>Add new item</Buttons>
+                </form>
+            </div>
+        )
+    }
+}
+
 
 export default Form
